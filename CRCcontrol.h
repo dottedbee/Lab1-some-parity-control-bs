@@ -12,7 +12,7 @@ using namespace std;
 
 // wielomian: x8+x2+x+1 100000111 0x07
 
-char crc8(char data, int crc)
+char crc8(char data, char crc)
 {
     for (size_t i = 0; i < sizeof(data); ++i)
     {
@@ -31,10 +31,10 @@ char crc8(char data, int crc)
     return crc;
 }
 
-int calculateCRC8(vector<char> &binaryData)
+char calculateCRC8(vector<char> &binaryData)
 {
-    int crc8val = 0;
-    int crc = 0x00;
+    char crc8val = 0x00;
+    char crc = 0x00;
 
     for(size_t i = 0; i < binaryData.size(); ++i)
     {
@@ -51,7 +51,7 @@ int crcControl (vector<char> &fileData, string withCRCFileName, string fileName,
         vector<char> withCRCCheck;
         withCRCCheck.reserve(fileData.size()+1); 	// cztery bajty na sume kontrolna CRC32
 
-        int crc8 = calculateCRC8(fileData);
+        char crc8 = calculateCRC8(fileData);
 
         fileData = addErrors(errorRepetition, errorPercentage, fileData, repetitionEnabled);
 
@@ -69,9 +69,9 @@ int crcControl (vector<char> &fileData, string withCRCFileName, string fileName,
 
         vector<char> extractedData;
         extractedData.assign(binaryData.begin(), binaryData.end()-1);
-        int crcChecked = calculateCRC8(extractedData);
+        char crcChecked = calculateCRC8(extractedData);
 
-        int crcReceived = binaryData[binaryData.size()-1];
+        char crcReceived = binaryData[binaryData.size()-1];
 
 // sprawdzam zgodnosc sumy kontrolnej odczytanej z pliku i tej wyliczonej na nowo
         if (crcReceived != crcChecked)
